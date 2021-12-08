@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from flask import Flask, jsonify
 
-from providers import pokeapi
+from providers import funtransapi, pokeapi
 
 app = Flask(__name__)
 
@@ -10,3 +10,15 @@ app = Flask(__name__)
 @app.route("/pokemon/<name>")
 def get_pokemon(name: str):
     return jsonify(pokeapi.get_pokemon(name))
+
+
+@app.route("/pokemon/translated/<name>")
+def get_pokemon_translated(name: str):
+    pokemon = pokeapi.get_pokemon(name)
+
+    if pokemon.habitat == "cave" or pokemon.isLegendary:
+        pokemon.description = funtransapi.as_yoda(pokemon.description)
+    else:
+        pokemon.description = funtransapi.as_shakespeare(pokemon.description)
+
+    return jsonify(pokemon)
