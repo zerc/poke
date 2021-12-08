@@ -22,9 +22,11 @@ def get_pokemon(name: str) -> Pokemon:
     response.raise_for_status()
 
     raw_data = response.json()
+    habitat = raw_data["habitat"]
+
     return Pokemon(
         name=raw_data["name"],
         description=raw_data["flavor_text_entries"][0]["flavor_text"],
-        habitat=raw_data["habitat"],
+        habitat=habitat["name"] if habitat else "",
         isLegendary=raw_data["is_legendary"],
     )

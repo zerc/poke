@@ -18,5 +18,5 @@ def test_get_pokemon():
         pokemon.description
         == "When BURMY evolved, its cloak\nbecame a part of this Pokémon’s\nbody. The cloak is never shed."
     )
-    assert pokemon.habitat is None
+    assert pokemon.habitat == ""
     assert pokemon.isLegendary is False
