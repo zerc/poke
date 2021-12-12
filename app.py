@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from os import environ
+
 from flask import Flask, jsonify
 
 from providers import funtransapi, pokeapi
@@ -22,3 +24,9 @@ def get_pokemon_translated(name: str):
         pokemon.description = funtransapi.as_shakespeare(pokemon.description)
 
     return jsonify(pokemon)
+
+
+if __name__ == "__main__":
+    host = environ.get("SERVER_HOST", "127.0.0.1")
+    port = int(environ.get("SERVER_PORT", 8080))
+    app.run(host=host, port=port)
