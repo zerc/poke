@@ -16,14 +16,26 @@ class Pokemon:
     isLegendary: bool
 
 
-@lru_cache(maxsize=512)
 def get_pokemon(name: str) -> Pokemon:
-    raw_data = client.get(f"/pokemon-species/{name}/")
-    habitat = raw_data["habitat"]
-
+    data = _request(name)
     return Pokemon(
-        name=raw_data["name"],
-        description=raw_data["flavor_text_entries"][0]["flavor_text"],
-        habitat=habitat["name"] if habitat else "",
-        isLegendary=raw_data["is_legendary"],
+        name=data["name"],
+        description=data["description"],
+        habitat=data["habitat"],
+        isLegendary=(data["is_legendary"] == "True"),
     )
+
+
+@lru_cache(maxsize=512)
+def _request(name: str) -> dict[str, str]:
+    """Returns a subset of raw data."""
+    raw_data = client.get(f"/pokemon-species/{name}/")
+    habitat = raw_data["habitat"]["name"] if raw_data["habitat"] else ""
+    return {
+        "name": raw_data["name"],
+        "description": raw_data["flavor_text_entries"][0]["flavor_text"],
+        "habitat": habitat,
+        "is_legendary": ["False", "True"][
+            raw_data["is_legendary"]
+        ],  # HACK: to make mypy happy
+    }
