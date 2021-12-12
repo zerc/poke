@@ -1,7 +1,6 @@
-import requests
+from providers.base import APIClient
 
-session = requests.Session()
-BASE_URL = "https://api.funtranslations.com/translate"
+client = APIClient("https://api.funtranslations.com/translate")
 
 
 def as_yoda(text: str) -> str:
@@ -13,7 +12,5 @@ def as_shakespeare(text: str) -> str:
 
 
 def _do_request(translation_name: str, text: str) -> str:
-    response = session.post(f"{BASE_URL}/{translation_name}.json", json={"text": text})
-    response.raise_for_status()
-    data = response.json()
+    data = client.post(f"/{translation_name}.json", payload={"text": text})
     return data["contents"]["translated"]

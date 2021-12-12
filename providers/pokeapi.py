@@ -1,12 +1,11 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from functools import lru_cache
 
-import requests
+from providers.base import APIClient
 
-BASE_URL = "https://pokeapi.co/api/v2"
-
-session = requests.Session()
+client = APIClient("https://pokeapi.co/api/v2")
 
 
 @dataclass
@@ -17,11 +16,9 @@ class Pokemon:
     isLegendary: bool
 
 
+@lru_cache(maxsize=512)
 def get_pokemon(name: str) -> Pokemon:
-    response = session.get(f"{BASE_URL}/pokemon-species/{name}/", timeout=10)
-    response.raise_for_status()
-
-    raw_data = response.json()
+    raw_data = client.get(f"/pokemon-species/{name}/")
     habitat = raw_data["habitat"]
 
     return Pokemon(
