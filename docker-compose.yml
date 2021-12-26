@@ -1,19 +1,19 @@
 version: "3.9"
 
 services:
-  poke:
+  poke-py:
     build:
-      context: .
+      context: poke_py/.
       dockerfile: Dockerfile
-      target: poke-service
+      # target: poke-py-service
     volumes:
-      - .:/app
+      - ./poke_py/:/app
     command: python app.py
     ports:
       - "8080:8080"
-  poke-test:
-    extends:
-      service: poke
-    build:
-      target: poke-tests
-    command: python -m pytest tests/
+  # poke-test:
+  #   extends:
+  #     service: poke
+  #   build:
+  #     target: poke-tests
+  #   command: python -m pytest tests/
