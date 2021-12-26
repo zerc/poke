@@ -1,12 +1,13 @@
 from __future__ import annotations
+from os import environ
 
 from dataclasses import dataclass
 from functools import lru_cache
 
 from providers.base import APIClient
 
-client = APIClient("https://pokeapi.co/api/v2")
-
+base_url = environ.get("POKEAPI_BASE_URL", "https://pokeapi.co/api/v2")
+client = APIClient(base_url)
 
 @dataclass
 class Pokemon:
