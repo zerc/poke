@@ -11,6 +11,7 @@ import (
 func ServeFile(prefix string, w http.ResponseWriter, r *http.Request)  {
 	name := strings.Replace(r.URL.Path, prefix, "", 1)
 	name = strings.Split(name, "/")[0]
+	name = strings.Split(name, ".")[0]
 	fname := fmt.Sprintf("mocks/%s_%s.json", strings.ToLower(r.Method), name)
 
 	http.ServeFile(w, r, fname)
