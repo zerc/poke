@@ -36,10 +36,11 @@ if [[ $run_unit == 1 ]]; then
     $cmd run --rm poke-unit
 fi
 
-
 if [[ $run_integrational == 1 ]]; then
     echo "\n\n${GREEN}Running integrational tests${NC}\n\n"
-    $cmd run --rm int-tests
+    POKEAPI_BASE_URL=http://mock-server:5000/pokeapi \
+        FUNTRANS_BASE_URL=http://mock-server:5000/translate \
+        $cmd run --rm int-tests
 fi
 
 $cmd stop

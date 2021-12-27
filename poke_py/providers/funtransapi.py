@@ -1,6 +1,11 @@
+from __future__ import annotations
+
+from os import environ
+
 from providers.base import APIClient
 
-client = APIClient("https://api.funtranslations.com/translate")
+base_url = environ.get("FUNTRANS_BASE_URL", "https://api.funtranslations.com/translate")
+client = APIClient(base_url)
 
 
 def as_yoda(text: str) -> str:

@@ -8,18 +8,26 @@ import (
 	"strings"
 )
 
+func ServeFile(prefix string, w http.ResponseWriter, r *http.Request)  {
+	name := strings.Replace(r.URL.Path, prefix, "", 1)
+	name = strings.Split(name, "/")[0]
+	fname := fmt.Sprintf("mocks/%s_%s.json", strings.ToLower(r.Method), name)
+
+	http.ServeFile(w, r, fname)
+	w.Header().Add("Content-Type", "applicaiton/json")
+}
+
 func MainHandler(w http.ResponseWriter, r *http.Request) {
 	path := r.URL.Path
+	log.Printf("[info] serving %s", path)
 
-	if strings.HasPrefix(path, "/pokeapi/pokemon-species/") && r.Method == "GET" {
-		name := strings.Replace(r.URL.Path, "/pokeapi/pokemon-species/", "", 1)
-		name = strings.Split(name, "/")[0]
-		fname := fmt.Sprintf("mocks/%s.json", name)
-		log.Printf("[info] serving %s", fname)
-		http.ServeFile(w, r, fname)
-		w.Header().Add("Content-Type", "applicaiton/json")
-		return
-	} 
+	prefixes := []string{"/pokeapi/pokemon-species/", "/translate/"}
+	for _, prefix := range prefixes {
+		if strings.HasPrefix(path, prefix) {
+			ServeFile(prefix, w, r)
+			return
+		}
+	}
 
 	http.Error(w, "Not found", http.StatusNotFound)
 }
