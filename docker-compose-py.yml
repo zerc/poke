@@ -1,0 +1,13 @@
+version: "3.9"
+
+services:
+  poke:
+    build:
+      context: poke_py/.
+      dockerfile: Dockerfile
+    volumes:
+      - ./poke_py/:/app
+    command: python app.py
+  poke-unit:
+    extends: poke
+    command: python -m pytest tests/

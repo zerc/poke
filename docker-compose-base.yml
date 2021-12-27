@@ -13,15 +13,11 @@ services:
       - "5000"
     ports:
       - "8081:5000"
-  poke-py:
-    build:
-      context: poke_py/.
-      dockerfile: Dockerfile
-    volumes:
-      - ./poke_py/:/app
-    command: python app.py
+  poke:
+    # Each implementation should define its own compose file
+    # with `poke` service and provide instructions how to build it.
+    # The only condition - it needs to have 8080 port exposed.
     expose:
-      # NOTE: Each implementation is expected to expose 8080 port.
       - "8080"
     ports:
       - "8080:8080"
@@ -33,3 +29,8 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./int_tests/:/app
+    environment:
+      - SERVICE_HOST=poke:8080
+    depends_on:
+      - mock-server
+      - poke
