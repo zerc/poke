@@ -10,11 +10,13 @@ COPY providers /app/proviers/
 RUN apk update && \
     apk add --no-cache --virtual .build-deps build-base libc-dev gcc>9 openssl-dev~=1.1 && \
     pip install --no-cache-dir -r /app/requirements.txt && \
+    pip install gunicorn && \
     addgroup -g 1000 app && adduser -u 1000 -G app -s /bin/sh -D app
 
 WORKDIR /app
 USER app
-CMD ["python", "app.py"]
+CMD ["gunicorn", "-b", "0.0.0.0:8080", "-w", 4, "app:app"]
+
 
 FROM poke-service AS poke-tests
 COPY requirements.test.txt /app/requirements.test.txt
