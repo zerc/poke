@@ -33,12 +33,17 @@ func MainHandler(w http.ResponseWriter, r *http.Request) {
 	http.Error(w, "Not found", http.StatusNotFound)
 }
 
+func HealthCheckHandler(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte("OK"))
+}
+
 func main() {
 	host_port := os.Getenv("HOST_PORT")
 	if host_port == "" {
 		host_port = "127.0.0.1:8080"
 	}
 
+	http.HandleFunc("/health-check", HealthCheckHandler)
 	http.HandleFunc("/", MainHandler)
 	fmt.Printf("Starting mock server at %s\n", host_port)
 	log.Fatal(http.ListenAndServe(host_port, nil))

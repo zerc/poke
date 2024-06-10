@@ -15,7 +15,7 @@ RUN apk update && \
 
 WORKDIR /app
 USER app
-CMD ["gunicorn", "-b", "0.0.0.0:8080", "-w", 4, "app:app"]
+CMD ["gunicorn", "-b", "0.0.0.0:8080", "-w", "4", "app:app"]
 
 
 FROM poke-service AS poke-tests

@@ -24,6 +24,8 @@ services:
     environment:
       - POKEAPI_BASE_URL
       - FUNTRANS_BASE_URL
+    depends_on:
+      - mock-server
   int-tests:
     build:
       context: int_tests/.
