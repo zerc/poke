@@ -1,4 +1,8 @@
 # Fake API server
 
-Used as part of integration testing it emulates responses of 3rd-party services.
+Emulates a 3rd-party services:
 
+* https://pokeapi.co
+* https://api.funtranslations.com
+
+to avoid calling them directly during the tests.

@@ -25,13 +25,19 @@ docker compose up poke-test
 ```
 
 
-## Production API notes
+## Rel-life Production notes
 
-### Python specific
+#### Deployment
 
-To run this app in production, one would use something like Nginx + UWSGI/Gunicorn to allow concurrent requests. The current implementation uses the development server and can only run one request at a time and does not support pool connections or buffering.
+In the production environment, the application service would usually be run behind a reverse proxy server like Nginx. This will take care of SSL, static file serving, buffering etc. Assuming the application will be deployed in the cloud (e.g. AWS ECS) it will also be behind a load balancer to ensure high availability and scalability.
 
-### Design simplifications
+#### Monitoring
+
+In production, I would use a monitoring tool like Prometheus to monitor the application. I would monitor the number of requests, response times, error rates, etc. I would also monitor the underlying infrastructure like CPU, memory, disk usage, etc. I would set up alerts to notify me if something goes wrong.
+
+#### Logging / error tracking
+
+I would be adding structured logging to the application. I would log the request/response data with the minimum required information such as TIME - METHOD - PATH - RESPONSE CODE, RESPONSE TIME. I would also log errors with a stack trace. I would use a service like Sentry to track errors and exceptions in the application. This would help me to identify and fix issues quickly.
 
 #### Caching
 
@@ -40,7 +46,7 @@ For GET requests to the Pokeapi service, I used a simple in-memory LRU cache - t
 * it doesn't support TTL i.e. it will be in memory until the process killed
 * it's not shared between processes/containers i.e. each of them would have its own copy
 
-For production, I would use something like Redis for caching.
+For production, however, I would use a distributed cache like Redis. It would solve both of the issues mentioned above.
 
 #### Errors handling
 
